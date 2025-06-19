@@ -52,7 +52,7 @@ var io = new socket_io_1.Server(httpServer, {
         methods: ['GET', 'POST']
     }
 });
-mongoose_1.default.connect('mongodb+srv://vikashraval995:q5EKvXW7AoExUQcG@cluster0.jdj9wvu.mongodb.net/messageDB?retryWrites=true&w=majority')
+mongoose_1.default.connect('mongodb+srv://vikashraval995:S7Rm9ZXMvvqpUBMY@chatmessagedb.z4twiua.mongodb.net/messageDB?retryWrites=true&w=majority')
     .then(function () { return console.log('✅ MongoDB Connected'); })
     .catch(function (err) { return console.error('❌ MongoDB Error:', err); });
 app.use((0, cors_1.default)());

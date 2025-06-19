@@ -17,7 +17,7 @@ const io = new Server(httpServer, {
   }
 });
 
-mongoose.connect('mongodb+srv://vikashraval995:q5EKvXW7AoExUQcG@cluster0.jdj9wvu.mongodb.net/messageDB?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://vikashraval995:S7Rm9ZXMvvqpUBMY@chatmessagedb.z4twiua.mongodb.net/messageDB?retryWrites=true&w=majority')
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.error('❌ MongoDB Error:', err));
 
