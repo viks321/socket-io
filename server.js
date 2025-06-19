@@ -88,7 +88,7 @@ io.on('connection', function (socket) {
         });
     }); });
 });
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 10000;
 httpServer.listen(PORT, function () {
     console.log("\uD83D\uDE80 Server running on http://localhost:".concat(PORT));
 });

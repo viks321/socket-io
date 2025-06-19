@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
@@ -41,7 +41,7 @@ io.on('connection', socket => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 httpServer.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
