@@ -41,7 +41,7 @@ exports.app.get('/messages', (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 // Socket.io communication
 io.on('connection', socket => {
-    console.log('📱 Android client connected');
+    console.log('📱 Android client connected now');
     socket.on('sendMessage', (data) => __awaiter(void 0, void 0, void 0, function* () {
         const message = new message_1.default({ text: data.text });
         yield message.save();

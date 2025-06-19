@@ -11,3 +11,4 @@ const messageSchema = new mongoose_1.default.Schema({
     timestamp: { type: Date, default: Date.now }
 });
 exports.default = mongoose_1.default.model('Message', messageSchema);
+exports.app = (0, express_1.default)();
