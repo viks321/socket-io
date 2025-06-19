@@ -51,4 +51,12 @@ io.on('connection', socket => {
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
+}).on('error', (err) => {
+    if (err.message === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use.`);
+        process.exit(1); // Exit instead of crashing
+    }
+    else {
+        throw err;
+    }
 });
