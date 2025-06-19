@@ -13,7 +13,8 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: '*', // allow all origins (Android app)
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
