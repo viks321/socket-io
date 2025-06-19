@@ -32,12 +32,12 @@ app.get('/messages', async (req, res) => {
 
 // Socket.io communication
 io.on('connection', socket => {
-  console.log('📱 Android client connected now');
+  console.log('📱 Android client connected now', socket.id);
 
   socket.on('sendMessage', async data => {
     const message = new Message({ text: data.text });
     await message.save();
-    io.emit('receiveMessage', message); // send to all clients
+    socket.broadcast.emit('receiveMessage', message); // send to all clients
   });
 });
 
