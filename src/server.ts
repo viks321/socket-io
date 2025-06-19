@@ -32,7 +32,7 @@ app.get('/messages', async (req, res) => {
 
 // Socket.io communication
 io.on('connection', socket => {
-  console.log('📱 Android client connected');
+  console.log('📱 Android client connected now');
 
   socket.on('sendMessage', async data => {
     const message = new Message({ text: data.text });
