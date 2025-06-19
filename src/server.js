@@ -73,7 +73,7 @@ exports.app.get('/messages', function (req, res) { return __awaiter(void 0, void
 }); });
 // Socket.io communication
 io.on('connection', function (socket) {
-    console.log('📱 Android client connected');
+    console.log('📱 Android client connected now');
     socket.on('sendMessage', function (data) { return __awaiter(void 0, void 0, void 0, function () {
         var message;
         return __generator(this, function (_a) {
@@ -89,7 +89,15 @@ io.on('connection', function (socket) {
         });
     }); });
 });
-var PORT = process.env.PORT || 10000;
+var PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, function () {
     console.log("\uD83D\uDE80 Server running on http://localhost:".concat(PORT));
+}).on('error', function (err) {
+    if (err.message === 'EADDRINUSE') {
+        console.error("\u274C Port ".concat(PORT, " is already in use."));
+        process.exit(1); // Exit instead of crashing
+    }
+    else {
+        throw err;
+    }
 });

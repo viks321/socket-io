@@ -8,4 +8,3 @@ var messageSchema = new mongoose_1.default.Schema({
     timestamp: { type: Date, default: Date.now }
 });
 exports.default = mongoose_1.default.model('Message', messageSchema);
-
