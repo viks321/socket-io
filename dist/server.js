@@ -16,10 +16,11 @@ exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
-const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const message_1 = __importDefault(require("./models/message"));
+const connectDB_1 = __importDefault(require("./db/connectDB"));
+const getMessages_1 = __importDefault(require("./api/getMessages"));
 dotenv_1.default.config();
 exports.app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(exports.app);
@@ -30,16 +31,10 @@ const io = new socket_io_1.Server(httpServer, {
         credentials: true
     }
 });
-mongoose_1.default.connect('mongodb+srv://vikashraval995:S7Rm9ZXMvvqpUBMY@chatmessagedb.z4twiua.mongodb.net/messageDB?retryWrites=true&w=majority')
-    .then(() => console.log('✅ MongoDB Connected'))
-    .catch(err => console.error('❌ MongoDB Error:', err));
+(0, connectDB_1.default)();
 exports.app.use((0, cors_1.default)());
 exports.app.use(express_1.default.json());
-// Optional REST endpoint for old messages
-exports.app.get('/messages', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const messages = yield message_1.default.find();
-    res.json(messages);
-}));
+exports.app.use('/getMessages', getMessages_1.default);
 // Socket.io communication
 io.on('connection', socket => {
     console.log('📱 Android client connected now', socket.id);

@@ -36,57 +36,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
-var express_1 = require("express");
-var http_1 = require("http");
-var socket_io_1 = require("socket.io");
-var dotenv_1 = require("dotenv");
-var cors_1 = require("cors");
-var message_1 = require("./models/message");
-var connectDB_1 = require("./db/connectDB");
-var getMessages_1 = require("./api/getMessages");
-dotenv_1.default.config();
-exports.app = (0, express_1.default)();
-var httpServer = (0, http_1.createServer)(exports.app);
-var io = new socket_io_1.Server(httpServer, {
-    cors: {
-        origin: '*', // allow all origins (Android app)
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
-});
-(0, connectDB_1.default)();
-exports.app.use((0, cors_1.default)());
-exports.app.use(express_1.default.json());
-exports.app.use('/getMessages', getMessages_1.default);
-// Socket.io communication
-io.on('connection', function (socket) {
-    console.log('📱 Android client connected now', socket.id);
-    socket.on('sendMessage', function (data) { return __awaiter(void 0, void 0, void 0, function () {
-        var message;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    message = new message_1.default({ message: data.message, from: data.from, to: data.to });
-                    return [4 /*yield*/, message.save()];
-                case 1:
-                    _a.sent();
-                    socket.emit('receiveMessage', message);
-                    socket.broadcast.emit('receiveMessage', message); // send to all clients
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-});
-var PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, function () {
-    console.log("\uD83D\uDE80 Server running on http://localhost:".concat(PORT));
-}).on('error', function (err) {
-    if (err.message === 'EADDRINUSE') {
-        console.error("\u274C Port ".concat(PORT, " is already in use."));
-        process.exit(1); // Exit instead of crashing
-    }
-    else {
-        throw err;
-    }
-});
+var mongoose_1 = require("mongoose");
+var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, mongoose_1.default.connect('mongodb+srv://vikashraval995:S7Rm9ZXMvvqpUBMY@chatmessagedb.z4twiua.mongodb.net/messageDB?retryWrites=true&w=majority')];
+            case 1:
+                _a.sent();
+                console.log('✅ Connected to MongoDB');
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.error('❌ MongoDB connection error:', error_1);
+                process.exit(1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.default = connectDB;
