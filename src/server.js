@@ -84,6 +84,7 @@ io.on('connection', function (socket) {
                     return [4 /*yield*/, message.save()];
                 case 1:
                     _a.sent();
+                    socket.emit('receiveMessage', message);
                     socket.broadcast.emit('receiveMessage', message); // send to all clients
                     return [2 /*return*/];
             }

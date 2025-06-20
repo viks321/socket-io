@@ -38,6 +38,7 @@ io.on('connection', socket => {
   socket.on('sendMessage', async data => {
     const message = new Message({message: data.message,from: data.from,to: data.to});
     await message.save();
+    socket.emit('receiveMessage', message);
     socket.broadcast.emit('receiveMessage', message); // send to all clients
   });
 });
