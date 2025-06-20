@@ -50,7 +50,8 @@ var httpServer = (0, http_1.createServer)(exports.app);
 var io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: '*', // allow all origins (Android app)
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        credentials: true
     }
 });
 mongoose_1.default.connect('mongodb+srv://vikashraval995:S7Rm9ZXMvvqpUBMY@chatmessagedb.z4twiua.mongodb.net/messageDB?retryWrites=true&w=majority')
@@ -73,17 +74,17 @@ exports.app.get('/messages', function (req, res) { return __awaiter(void 0, void
 }); });
 // Socket.io communication
 io.on('connection', function (socket) {
-    console.log('📱 Android client connected now');
+    console.log('📱 Android client connected now', socket.id);
     socket.on('sendMessage', function (data) { return __awaiter(void 0, void 0, void 0, function () {
         var message;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = new message_1.default({ text: data.text });
+                    message = new message_1.default({ message: data.message, from: data.from, to: data.to });
                     return [4 /*yield*/, message.save()];
                 case 1:
                     _a.sent();
-                    io.emit('receiveMessage', message); // send to all clients
+                    socket.broadcast.emit('receiveMessage', message); // send to all clients
                     return [2 /*return*/];
             }
         });

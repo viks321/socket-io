@@ -36,7 +36,7 @@ io.on('connection', socket => {
   console.log('📱 Android client connected now', socket.id);
 
   socket.on('sendMessage', async data => {
-    const message = new Message({ text: data.text });
+    const message = new Message({message: data.message,from: data.from,to: data.to});
     await message.save();
     socket.broadcast.emit('receiveMessage', message); // send to all clients
   });
