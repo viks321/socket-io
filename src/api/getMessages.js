@@ -38,9 +38,76 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var message_1 = require("../models/message");
+var jwt = require('jsonwebtoken');
+var User = require('../models/user');
+var bcrypt = require('bcryptjs');
+var auth = require('../jwt/authToken');
 var router = (0, express_1.Router)();
+router.post('/register', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, username, password, exist, hashed, user, err_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, username = _a.username, password = _a.password;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, User.findOne({ username: username })];
+            case 2:
+                exist = _b.sent();
+                if (exist)
+                    return [2 /*return*/, res.status(400).json({ msg: 'User already exists' })];
+                return [4 /*yield*/, bcrypt.hash(password, 10)];
+            case 3:
+                hashed = _b.sent();
+                user = new User({ username: username, password: hashed });
+                return [4 /*yield*/, user.save()];
+            case 4:
+                _b.sent();
+                res.status(201).json({ msg: 'User created' });
+                return [3 /*break*/, 6];
+            case 5:
+                err_1 = _b.sent();
+                res.status(500).json({ msg: 'Server error' });
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/login', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, username, password, user, isMatch, token, err_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, username = _a.username, password = _a.password;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 4, , 5]);
+                return [4 /*yield*/, User.findOne({ username: username })];
+            case 2:
+                user = _b.sent();
+                if (!user)
+                    return [2 /*return*/, res.status(400).json({ msg: 'Invalid credentials' })];
+                return [4 /*yield*/, bcrypt.compare(password, user.password)];
+            case 3:
+                isMatch = _b.sent();
+                if (!isMatch)
+                    return [2 /*return*/, res.status(400).json({ msg: 'Invalid credentials' })];
+                token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+                    expiresIn: '1h'
+                });
+                res.json({ token: token });
+                return [3 /*break*/, 5];
+            case 4:
+                err_2 = _b.sent();
+                res.status(500).json({ msg: 'Server error' });
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); });
 // Optional REST endpoint for old messages
-router.get('/messages', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.get('/messages', auth, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var messages;
     return __generator(this, function (_a) {
         switch (_a.label) {

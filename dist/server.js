@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
@@ -22,8 +21,8 @@ const message_1 = __importDefault(require("./models/message"));
 const connectDB_1 = __importDefault(require("./db/connectDB"));
 const getMessages_1 = __importDefault(require("./api/getMessages"));
 dotenv_1.default.config();
-exports.app = (0, express_1.default)();
-const httpServer = (0, http_1.createServer)(exports.app);
+const app = (0, express_1.default)();
+const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: '*', // allow all origins (Android app)
@@ -32,17 +31,17 @@ const io = new socket_io_1.Server(httpServer, {
     }
 });
 (0, connectDB_1.default)();
-exports.app.use((0, cors_1.default)());
-exports.app.use(express_1.default.json());
-exports.app.use('/getMessages', getMessages_1.default);
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+app.use('/getMessages', getMessages_1.default);
 // Socket.io communication
 io.on('connection', socket => {
     console.log('📱 Android client connected now', socket.id);
     socket.on('sendMessage', (data) => __awaiter(void 0, void 0, void 0, function* () {
         const message = new message_1.default({ message: data.message, from: data.from, to: data.to });
         yield message.save();
-        socket.emit('receiveMessage', message);
-        socket.broadcast.emit('receiveMessage', message); // send to all clients
+        socket.emit('receiveMessage', message); // send to sender client only
+        socket.broadcast.emit('receiveMessage', message); // send to all receiver clients only
     }));
 });
 const PORT = process.env.PORT || 3000;

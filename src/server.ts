@@ -9,8 +9,9 @@ import messagesRoutes from './api/getMessages'
 
 dotenv.config();
 
-export const app = express();
+const app = express();
 const httpServer = createServer(app);
+
 const io = new Server(httpServer, {
   cors: {
     origin: '*', // allow all origins (Android app)
@@ -32,8 +33,8 @@ io.on('connection', socket => {
   socket.on('sendMessage', async data => {
     const message = new Message({message: data.message,from: data.from,to: data.to});
     await message.save();
-    socket.emit('receiveMessage', message);
-    socket.broadcast.emit('receiveMessage', message); // send to all clients
+    socket.emit('receiveMessage', message);// send to sender client only
+    socket.broadcast.emit('receiveMessage', message); // send to all receiver clients only
   });
 });
 

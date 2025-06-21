@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
 var express_1 = require("express");
 var http_1 = require("http");
 var socket_io_1 = require("socket.io");
@@ -46,8 +45,8 @@ var message_1 = require("./models/message");
 var connectDB_1 = require("./db/connectDB");
 var getMessages_1 = require("./api/getMessages");
 dotenv_1.default.config();
-exports.app = (0, express_1.default)();
-var httpServer = (0, http_1.createServer)(exports.app);
+var app = (0, express_1.default)();
+var httpServer = (0, http_1.createServer)(app);
 var io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: '*', // allow all origins (Android app)
@@ -56,9 +55,9 @@ var io = new socket_io_1.Server(httpServer, {
     }
 });
 (0, connectDB_1.default)();
-exports.app.use((0, cors_1.default)());
-exports.app.use(express_1.default.json());
-exports.app.use('/getMessages', getMessages_1.default);
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+app.use('/getMessages', getMessages_1.default);
 // Socket.io communication
 io.on('connection', function (socket) {
     console.log('📱 Android client connected now', socket.id);
@@ -71,8 +70,8 @@ io.on('connection', function (socket) {
                     return [4 /*yield*/, message.save()];
                 case 1:
                     _a.sent();
-                    socket.emit('receiveMessage', message);
-                    socket.broadcast.emit('receiveMessage', message); // send to all clients
+                    socket.emit('receiveMessage', message); // send to sender client only
+                    socket.broadcast.emit('receiveMessage', message); // send to all receiver clients only
                     return [2 /*return*/];
             }
         });

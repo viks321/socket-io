@@ -13,17 +13,28 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.11.30",
     "cross-env": "^7.0.3",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viks321/socket-io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/viks321/socket-io/issues"
+  },
+  "homepage": "https://github.com/viks321/socket-io#readme"
 }
