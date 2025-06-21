@@ -49,7 +49,7 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json({ token });
     }
     catch (err) {
-        res.status(500).json({ msg: 'Server error' });
+        res.status(500).json({ msg: 'Server error' + err });
     }
 }));
 // Optional REST endpoint for old messages

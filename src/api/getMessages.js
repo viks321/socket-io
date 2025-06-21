@@ -93,14 +93,14 @@ router.post('/login', function (req, res) { return __awaiter(void 0, void 0, voi
                 isMatch = _b.sent();
                 if (!isMatch)
                     return [2 /*return*/, res.status(400).json({ msg: 'Invalid credentials' })];
-                token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+                token = jwt.sign({ id: user._id }, 'supersecretkey123', {
                     expiresIn: '1h'
                 });
                 res.json({ token: token });
                 return [3 /*break*/, 5];
             case 4:
                 err_2 = _b.sent();
-                res.status(500).json({ msg: 'Server error' });
+                res.status(500).json({ msg: 'Server error' + err_2 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
         }
